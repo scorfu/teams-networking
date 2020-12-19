@@ -1,27 +1,26 @@
-console.log('HIIIII')
+console.log('test script');
 
-function insertPersons(data) {
-    console.log('data: ', data)
+function insertPersons(persons) {
     const tbody = document.querySelector('#list tbody');
-    tbody.innerHTML =  getPersonHTML() + getPersonHTML()
+    tbody.innerHTML = getPersonsHtml(persons); ;
 }
 
-function getPersonHTML() {
-    return `<tr class="fperson">
-    <td>Sergiu</td>
-    <td>Corfu</td>
-    <td> <a target="_blank" href="https://www.linkedin.com/in/corfu-sergiu-575148145/">LinkedIn</a> and <a
-            target="_blank" href="https://github.com/scorfu">GitHub</a></td>
+function getPersonsHtml (persons) {
+    //TODO - get all persons (using array.map)
+    return getPersonHtml(persons[0]) + getPersonHtml(persons[1]);
+}
+
+function getPersonHtml (person) {
+    const gitHub = person.gitHub;
+    return `<tr>
+        <td>${person.firstName}</td>
+        <td>${person.lastName}</td>
+        <td><a target="_blank" href="https://github.com/${gitHub}">Github</a></td>
     </tr>`;
 }
 
-
-
-console.log(getPersonHTML())
-
-insertPersons()
-
-fetch('persons.json').then(res => res.json())
-.then(data => {
-    insertPersons(data)
-});
+fetch('persons.json')
+    .then(res => res.json())
+    .then(data => {
+        insertPersons(data);
+    });
