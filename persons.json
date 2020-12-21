@@ -1,4 +1,5 @@
 [
     { "firstName": "Sergiu", "lastName": "Corfu", "gitHub": "scorfu" },
-    { "firstName": "Nicolae", "lastName": "Matei", "gitHub": "nmatei" }
+    { "firstName": "Nicolae", "lastName": "Matei", "gitHub": "nmatei" },
+    {"firstName": "Random", "lastName": "Player", "gitHub": "prandom"}
 ]
