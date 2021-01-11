@@ -1,19 +1,19 @@
 const API = {
     CREATE: {
-        URL: "create.json",
-        METHOD: "GET" // POST
+        URL: "http://localhost:3000/teams-json/create", // used to be create.json
+        METHOD: "POST" // POST (used to be GET)
     },
     READ: {
-        URL: "persons.json",
+        URL: "http://localhost:3000/teams-json", //persons.json (used to be)
         METHOD: "GET"
     },
     UPDATE : {
-        URL: "",
-        METHOD: "GET"
+        URL: "http://localhost:3000/teams-json/update",
+        METHOD: "PUT"
     },
     DELETE: {
-        URL: "delete.json",
-        METHOD: "GET" // DELETE
+        URL: "http://localhost:3000/teams-json/delete", // used to be delete.json
+        METHOD: "DELETE" // DELETE (used to be Get)
     }
 };
 
@@ -33,7 +33,7 @@ function getPersonHtml (person) {
         <td>${person.lastName}</td>
         <td><a target="_blank" href="https://github.com/${gitHub}">Github</a></td>
         <td>
-            <a href="${API.DELETE.URL}?id=${person.id}">&#10006;</a>
+            <a href="#" class="delete-row" data-id="${person.id}">&#10006;</a>
         </td>
     </tr>`;
 }
@@ -59,15 +59,6 @@ function searchPersons(text) {
     })
 }
 
-const search = document.getElementById('search');
-search.addEventListener('input', e => {
-    const text = e.target.value
-    
-    const filtrate = searchPersons(text);
-
-    insertPersons(filtrate);
-});
-
 function saveTeamMember() {
     const firstName = document.querySelector('input[name=firstName]').value;
     const lastName = document.querySelector('input[name=lastName]').value;
@@ -79,7 +70,10 @@ function saveTeamMember() {
     console.info('saving', person);
 
     fetch(API.CREATE.URL, {
-        method: API.CREATE.METHOD, 
+        method: API.CREATE.METHOD,
+        headers: {
+            "Content-Type": "application/json"
+          },
         body: API.CREATE.METHOD === "GET" ? null : JSON.stringify(person)
     })
         .then(res => res.json())
@@ -97,10 +91,43 @@ function saveTeamMember() {
         });
 };
 
-const saveBtn = document.querySelector('#list tfoot button')
-saveBtn.addEventListener('click', () => {
-    saveTeamMember()
+function deleteTeamMember (id) {
+    fetch("http://localhost:3000/teams-json/delete", {
+  method: "DELETE",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ id })
 });
+}
+
+function addEventListeners() {
+    const search = document.getElementById('search');
+    search.addEventListener('input', e => {
+        const text = e.target.value
+        
+        const filtrate = searchPersons(text);
+    
+        insertPersons(filtrate);
+    });
+    
+    const saveBtn = document.querySelector('#list tfoot button')
+    saveBtn.addEventListener('click', () => {
+        saveTeamMember()
+    });
+
+    const table = document.querySelector('#list tbody')
+    table.addEventListener('click', (e) => {
+        const target = e.target
+        if (target.matches('a.delete-row')) {
+            const id = target.getAttribute('data-id')
+        deleteTeamMember(id);
+    }
+    });
+}
+
+addEventListeners();
+
 
 // var y = prompt("ce faci?")
 // console.log(y)
