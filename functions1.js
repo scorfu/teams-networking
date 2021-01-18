@@ -80,25 +80,25 @@ function saveTeamMember() {
         .then(r  => {
             console.warn(r)
             if (r.success) {
-                // setTimeout(() => {
-                //     console.info('refresh list');
-                //     loadList();
-                // }, 300000)
-                alert('saving, please stay')
-                console.info('refresh list');
                 loadList();
             }
         });
 };
 
 function deleteTeamMember (id) {
-    fetch("http://localhost:3000/teams-json/delete", {
-  method: "DELETE",
+    fetch(API.DELETE.URL, {
+  method: API.DELETE.METHOD,
   headers: {
     "Content-Type": "application/json"
   },
   body: JSON.stringify({ id })
-});
+})
+    .then(res => res.json())
+    .then(r => {
+        if (r.success) {
+            loadList();
+        }
+    })
 }
 
 function addEventListeners() {
@@ -127,15 +127,4 @@ function addEventListeners() {
 }
 
 addEventListeners();
-
-
-// var y = prompt("ce faci?")
-// console.log(y)
-// alert("Nu da click!")
-
-// var objs = JSON.parse(data);
-// objs.push({"firstName": "Sergiu", "lastName": "Corfu", "gitHub": "scorfu"});
-// data = JSON.stringify(objs);
-
-
 
